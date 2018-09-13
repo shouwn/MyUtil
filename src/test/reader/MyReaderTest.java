@@ -11,13 +11,4 @@ import java.io.Writer;
 
 public class MyReaderTest {
 
-    @Test
-    public void readTest(){
-
-        int i = MyReader.read(br -> {
-            return Integer.valueOf(br.readLine());
-        });
-
-        Assertions.assertEquals(1, i);
-    }
 }
