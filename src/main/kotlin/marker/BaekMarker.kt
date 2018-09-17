@@ -1,8 +1,10 @@
 package marker
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
+import io.reactivex.rxkotlin.toFlowable
 import io.reactivex.rxkotlin.toObservable
 import io.reactivex.schedulers.Schedulers
 import org.jsoup.Jsoup
@@ -31,31 +33,36 @@ enum class Type{
 fun main(args: Array<String>){
 //    val target = args[0]
 //    val subTarget = args[1]
-    val target = "5585"
-    val subTarget = "2739"
+    val target = "8958"
+    val subTarget = ""
 
     val start = System.currentTimeMillis()
     println(LocalDateTime.now())
 
-//    File("./list.txt").bufferedReader().readLines().toObservable()
-//            .subscribeOn(Schedulers.io())
-//            .map { CompletableFuture.supplyAsync { findAndMark(it, target, subTarget) } }
-//            .observeOn(Schedulers.io())
-//            .map { it.get() }
-//            .subscribe {println(it)}
+//    File("./list.txt").bufferedReader().readLines().parallelStream()
+//            .map { findAndMark(it, target, subTarget) }
+//            .forEach {println(it)}
 
-    File("./list.txt").bufferedReader().readLines().parallelStream()
-            .map { CompletableFuture.supplyAsync { findAndMark(it, target, subTarget) } }
-            .map { it.get() }
-            .forEach {println(it)}
+    val map = hashMapOf<String, String>()
 
-    Thread.sleep(10000)
+    val studentList = File("./list.txt").bufferedReader().readLines()
+
+    studentList.toFlowable()
+            .flatMap { Flowable.just(it)
+                    .observeOn(Schedulers.io())
+                    .map { Pair(it, findAndMark(it, target, subTarget)) } }
+            .observeOn(Schedulers.io())
+            .blockingSubscribe { map[it.first] = it.second }
+
+    studentList.stream()
+            .map { "$it\t${map[it]}" }
+            .forEach { println(it) }
 
     println(System.currentTimeMillis() - start)
 }
 
 fun findAndMark(id: String, target: String, subTarget: String?): String{
-    return "$id\t${mark(findNumbersMapById(id), target, subTarget)}"
+    return "${mark(findNumbersMapById(id), target, subTarget)}"
 }
 
 fun mark(map: Map<Type, Set<String>>, target: String, subTarget: String?): String =
@@ -69,8 +76,6 @@ fun mark(map: Map<Type, Set<String>>, target: String, subTarget: String?): Strin
 
 
 fun findNumbersMapById(id: String): Map<Type, Set<String>> { // 404 핸들링 안 만듬
-    println("Thread: ${Thread.currentThread().name}   $id start")
-
     val elements =
             Jsoup.connect("https://www.acmicpc.net/user/$id").get()
                     .getElementsByClass("panel panel-default")
@@ -79,8 +84,6 @@ fun findNumbersMapById(id: String): Map<Type, Set<String>> { // 404 핸들링 �
             Jsoup.parse(this.html()).getElementsByClass("problem_number").stream()
                     .map(Element::text)
                     .collect(Collectors.toSet())
-
-    println("Thread: ${Thread.currentThread().name}   $id end")
 
     return hashMapOf(Type.SOLVE to elements[0].numbers(), Type.TRY to elements[1].numbers())
 }
