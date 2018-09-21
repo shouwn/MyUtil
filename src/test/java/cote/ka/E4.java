@@ -1,6 +1,5 @@
 package cote.ka;
 
-import main.reader.MyReader;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

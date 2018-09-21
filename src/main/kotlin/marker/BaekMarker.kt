@@ -34,7 +34,7 @@ fun main(args: Array<String>){
 //    val target = args[0]
 //    val subTarget = args[1]
     val target = "8958"
-    val subTarget = ""
+    val subTarget = "11721"
 
     val start = System.currentTimeMillis()
     println(LocalDateTime.now())
