@@ -33,8 +33,8 @@ enum class Type{
 fun main(args: Array<String>){
 //    val target = args[0]
 //    val subTarget = args[1]
-    val target = "8958"
-    val subTarget = "11721"
+    val target = "10871"
+    val subTarget = ""
 
     val start = System.currentTimeMillis()
     println(LocalDateTime.now())
@@ -45,7 +45,7 @@ fun main(args: Array<String>){
 
     val map = hashMapOf<String, String>()
 
-    val studentList = File("./list.txt").bufferedReader().readLines()
+    val studentList = File("./list_python.txt").bufferedReader().readLines()
 
     studentList.toFlowable()
             .flatMap { Flowable.just(it)
@@ -76,9 +76,15 @@ fun mark(map: Map<Type, Set<String>>, target: String, subTarget: String?): Strin
 
 
 fun findNumbersMapById(id: String): Map<Type, Set<String>> { // 404 핸들링 안 만듬
-    val elements =
-            Jsoup.connect("https://www.acmicpc.net/user/$id").get()
-                    .getElementsByClass("panel panel-default")
+    val url = "https://www.acmicpc.net/user/$id"
+    val elements: Elements
+    try {
+        elements =
+                Jsoup.connect(url).get()
+                        .getElementsByClass("panel panel-default")
+    }catch (e: Exception) {
+        return hashMapOf(Type.SOLVE to setOf(), Type.TRY to setOf())
+    }
 
     fun Element.numbers(): Set<String> =
             Jsoup.parse(this.html()).getElementsByClass("problem_number").stream()
