@@ -1,9 +1,5 @@
-package cote.ka;
+package teco.ka;
 
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class E2 {
 

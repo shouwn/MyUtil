@@ -75,7 +75,7 @@ fun mark(map: Map<Type, Set<String>>, target: String, subTarget: String?): Strin
         }
 
 
-fun findNumbersMapById(id: String): Map<Type, Set<String>> { // 404 핸들링 안 만듬
+fun findNumbersMapById(id: String): Map<Type, Set<String>> {
     val url = "https://www.acmicpc.net/user/$id"
     val elements: Elements
     try {

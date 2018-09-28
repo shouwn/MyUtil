@@ -1,4 +1,4 @@
-package cote.ka;//package test.cote.ka;
+
 //
 //import main.reader.MyReader;
 //

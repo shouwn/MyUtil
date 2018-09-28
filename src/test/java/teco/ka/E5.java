@@ -1,4 +1,4 @@
-package cote.ka;
+package teco.ka;
 
 import reader.MyReader;
 
