@@ -1,6 +1,6 @@
 package teco.ka;
 
-import reader.MyReader;
+import utils.reader.MyReader;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
