@@ -31,7 +31,7 @@ public class E4 {
 
                 StringBuilder sb = new StringBuilder();
 
-                if(urls.length < 3 && urls.length > 4){
+                if(urls.length < 3 || urls.length > 4){
                     System.out.println("404 NOT_FOUND");
                     continue;
                 }
