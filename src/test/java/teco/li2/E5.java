@@ -40,14 +40,20 @@ public class E5 {
                 if(y == map.length - 1 && x == map[0].length - 1)
                     break;
 
-                if(!checkMove(x, y))
+                if(!checkMove(x, y)) {
+                    b.len = -1;
                     continue;
+                }
 
-                if("H".equals(map[y][x]) && ++incount == 2)
+                if("H".equals(map[y][x]) && ++incount == 2) {
+                    b.len = -1;
                     continue;
+                }
 
-                if(memo[y][x])
+                if(memo[y][x]) {
+                    b.len = -1;
                     continue;
+                }
                 else
                     memo[y][x] = true;
 
