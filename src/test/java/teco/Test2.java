@@ -32,7 +32,7 @@ class Game {
         }
     }
 
-    
+
 }
 
 class Territory {
